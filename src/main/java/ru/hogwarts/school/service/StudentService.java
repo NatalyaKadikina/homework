@@ -66,4 +66,27 @@ public class StudentService {
     public List<Student> getLastStudentsById() {
         return studentRepositories.getLastFiveStudent();
     }
+
+    public Collection<String> getFilteredByName() {
+        return studentRepositories.findAll().stream()
+                .map(Student::getName)
+                .map(String::toUpperCase)
+                .filter(s -> s.startsWith("А"))
+                .sorted()
+                .collect(Collectors.toList());
+    }
+
+
+    public Double getAllStudentsAvgAge() {
+        return studentRepositories.findAll()
+                .stream()
+                .mapToInt(Student::getAge)
+                .average()
+                .orElse(0);
+    }
+
+
+    public Collection<Student> getAll() {
+        return studentRepositories.findAll();
+    }
 }

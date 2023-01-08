@@ -1,5 +1,6 @@
 package ru.hogwarts.school.service;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import ru.hogwarts.school.model.Faculty;
 import ru.hogwarts.school.model.Student;
@@ -7,6 +8,9 @@ import ru.hogwarts.school.repositories.FacultyRepositories;
 import ru.hogwarts.school.repositories.StudentRepositories;
 
 import java.util.Collection;
+import java.util.Comparator;
+import java.util.Optional;
+import java.util.logging.Logger;
 
 @Service
 public class FacultyService {
@@ -49,5 +53,20 @@ public class FacultyService {
             return null;
         }
         return studentRepositories.findByFacultyId(faculty.getId());
+    }
+
+    public ResponseEntity<String> getFacultyNameWithMaxLength() {
+
+        Optional<String> maxFacultyName = facultyRepositories
+                .findAll()
+                .stream()
+                .map(Faculty::getName)
+                .max(Comparator.comparing(String::length));
+
+        if (maxFacultyName.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        } else {
+            return ResponseEntity.ok(maxFacultyName.get());
+        }
     }
 }

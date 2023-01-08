@@ -89,4 +89,18 @@ public class StudentController {
         logger.debug("Calling method getStudentFaculty (limit = {})", limit);
         return ResponseEntity.ok(studentService.getLastStudentsById());
     }
+
+    @GetMapping("/filteradbyname")
+    public ResponseEntity<Collection<String>> getAllStudentsWithAName() {
+        Collection<String> stringCollection = studentService.getFilteredByName();
+        if (stringCollection.size() == 0) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+        return ResponseEntity.ok(stringCollection);
+    }
+
+    @GetMapping("/getallstudentsavgagewithstream")
+    public Double getAllStudentsAvgAgeWithStream() {
+        return studentService.getAllStudentsAvgAge();
+    }
 }
