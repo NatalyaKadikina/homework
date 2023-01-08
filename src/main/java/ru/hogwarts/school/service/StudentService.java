@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 @Service
 public class StudentService {
     private final StudentRepositories studentRepositories;
-
+    private int countSync = 0;
     public StudentService(StudentRepositories studentRepositories) {
         this.studentRepositories = studentRepositories;
     }
@@ -85,8 +85,60 @@ public class StudentService {
                 .orElse(0);
     }
 
-
     public Collection<Student> getAll() {
         return studentRepositories.findAll();
     }
+
+    public void getAllStudentNames() {
+        List<String> names = studentRepositories.findAll().stream()
+                .map(user -> user.getName())
+                .collect(Collectors.toList());
+
+        printName(names.get(0));
+        printName(names.get(1));
+
+        new Thread(() -> {
+            printName(names.get(2));
+            printName(names.get(3));
+        }).start();
+
+        new Thread(() -> {
+            printName(names.get(4));
+            printName(names.get(5));
+        }).start();
+
+    }
+
+    public void getAllStudentNamesAsync() {
+        List<String> names = studentRepositories.findAll().stream()
+                .map(user -> user.getName())
+                .collect(Collectors.toList());
+
+        printNameAsync(names);
+        printNameAsync(names);
+
+        new Thread(() -> {
+            printNameAsync(names);
+            printNameAsync(names);
+        }).start();
+
+        new Thread(() -> {
+            printNameAsync(names);
+            printNameAsync(names);
+        }).start();
+    }
+
+    private void printName(String str) {
+        System.out.println(str);
+        try {
+            Thread.sleep(3000);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+    }
+    private synchronized void printNameAsync(List<String> names) {
+        System.out.println(names.get(countSync));
+        countSync++;
+    }
+
 }

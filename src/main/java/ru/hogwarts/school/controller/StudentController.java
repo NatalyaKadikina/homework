@@ -103,4 +103,14 @@ public class StudentController {
     public Double getAllStudentsAvgAgeWithStream() {
         return studentService.getAllStudentsAvgAge();
     }
+
+    @GetMapping("/all-students")
+    public void getAllStudentNames () {
+        studentService.getAllStudentNames();
+    }
+
+    @GetMapping("/all-students-async")
+    public void getAllStudentNamesAsync () {
+        studentService.getAllStudentNamesAsync();
+    }
 }

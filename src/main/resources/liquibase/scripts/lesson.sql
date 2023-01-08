@@ -1,4 +1,4 @@
--- liquibase formatted sql
+--liquibase formatted sql
 
 -- changeset Natalya:1
 CREATE INDEX student_name_index ON student (name);
